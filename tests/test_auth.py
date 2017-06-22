@@ -12,6 +12,7 @@ class TestAuth(TestCase):
         self.client = self.create_app().test_client()
         db.create_all()
 
+
     def test_register(self):
         payload = {
             'username': 'Kachulio',
