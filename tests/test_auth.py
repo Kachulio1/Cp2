@@ -55,3 +55,11 @@ class TestAuth(TestCase):
         r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertIn('The email address you have entered is already registered', json.loads(r.data.decode())['msg'])
 
+    def test_user_created_message(self):
+        payload = {
+            'username': 'Kachulio',
+            'email': 'Kachulio@ymail.com',
+            'password': '12jkl23@'
+        }
+        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        self.assertEqual(json.loads(r.data.decode())['msg'], 'user created')
