@@ -13,6 +13,10 @@ class TestAuth(TestCase):
         self.client = self.create_app().test_client()
         db.create_all()
 
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
     def test_register(self):
         payload = {
             'username': 'Kachulio',
