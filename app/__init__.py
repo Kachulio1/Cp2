@@ -21,9 +21,12 @@ def create_app(config_name):
     db.init_app(app)
     jwt.init_app(app)
 
-    # import auth blueprint and register it to the WSGI app
+    # import auth blueprint and register it to the WSGI app and also buckets
     from app.auth import views
     app.register_blueprint(views.auth)
+
+    from app.buckets import views
+    app.register_blueprint(views.bucketlist)
 
 
 
