@@ -21,7 +21,7 @@ class Bucketlist(db.Model):
         db.DateTime, default=db.func.current_timestamp(),
         onupdate=db.func.current_timestamp())
     user = db.Column(db.Integer, db.ForeignKey('users.id'))
-    bucketlists = db.relationship('Items', backref='items')
+    items = db.relationship('Item', backref='items')
 
     def __init__(self, name, user_id):
         """initialize with name, user_id."""
@@ -37,7 +37,7 @@ class Bucketlist(db.Model):
     # gets all bucket lists for the user
     @staticmethod
     def get_all_buckets_for_user(user_id):
-        return Bucketlist.query.filter_by(user=user_id)
+        return Bucketlist.query.filter_by(user=user_id).all()
 
     # saves the updated bucket list to the database
     def update(self):
@@ -52,7 +52,7 @@ class Bucketlist(db.Model):
         return "<Bucketlist {}>".format(self.name)
 
 
-class Items(db.Model):
+class Item(db.Model):
     # database table name
     __tablename__ = 'items'
     #
@@ -80,16 +80,20 @@ class Items(db.Model):
 
     # get all items
     def get_all_items(self, bucketlist_id):
-        return Items.query.filter_by(bucketlist=bucketlist_id)
+        return Item.query.filter_by(bucketlist=bucketlist_id).all()
 
     # if the item is updated the update method is called and save's the updated item in the data base
     def update(self):
         db.session.commit()
 
+
     # delete an item from the db
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    def __repr__(self):
+        return "<Item {}>".format(self.name)
 
 
 # a User model
@@ -125,4 +129,4 @@ class User(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return '<User %r>'.format(self.username)
+        return '<User {}>'.format(self.username)
