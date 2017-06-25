@@ -1,6 +1,11 @@
+# database object (db) from the main application module
 from app import db
+# Bcrypt for encrypting user password
 from flask_bcrypt import Bcrypt
+
+# an instantiate an instance of bcrypt
 bcrypt = Bcrypt()
+
 
 class Bucketlist(db.Model):
     """ Bucketlist database table structure"""
@@ -8,6 +13,7 @@ class Bucketlist(db.Model):
     # set the name of the table in plural
     __tablename__ = 'bucketlists'
 
+    # database columns for table bucketlist
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -23,18 +29,21 @@ class Bucketlist(db.Model):
         self.name = name
         self.user = user_id
 
-
+    # save a bucket list to the database
     def save(self):
         db.session.add(self)
         db.session.commit()
 
+    # gets all bucket lists for the user
     @staticmethod
-    def get_all_buckets_for_user(self, user_id):
+    def get_all_buckets_for_user(user_id):
         return Bucketlist.query.filter_by(user=user_id)
 
+    # saves the updated bucket list to the database
     def update(self):
         db.session.commit()
 
+    # deletes a bucket list from the database
     def delete(self):
         db.session.delete(self)
         db.session.commit()
@@ -42,56 +51,75 @@ class Bucketlist(db.Model):
     def __repr__(self):
         return "<Bucketlist {}>".format(self.name)
 
-    class Items(db.Model):
-        __tablename__ = 'items'
 
-        id = db.Column(db.Integer, primary_key=True)
-        name = db.Column(db.String(255))
-        date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-        date_modified = db.Column(
-            db.DateTime, default=db.func.current_timestamp(),
-            onupdate=db.func.current_timestamp())
-        bucketlist = db.Column(db.Integer, db.ForeignKey('bucketlists.id'))
+class Items(db.Model):
+    # database table name
+    __tablename__ = 'items'
+    #
+    # Database columns
+    #
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(
+        db.DateTime, default=db.func.current_timestamp(),
+        onupdate=db.func.current_timestamp())
+    bucketlist = db.Column(db.Integer, db.ForeignKey('bucketlists.id'))
 
-        def __init__(self, name, bucket_id):
-            """initialize with name, bucket_id."""
-            self.name = name
-            self.bucketlist = bucket_id
+    # end of database column
 
-        def save(self):
-            db.session.add(self)
-            db.session.commit()
+    def __init__(self, name, bucket_id):
+        """initialize with name, bucket_id."""
+        self.name = name
+        self.bucketlist = bucket_id
 
-        # get all itemes
-        def get_all_items(self, bucketlist_id):
-            return Items.query.filter_by(bucketlist=bucketlist_id)
+    # save an item to the database
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-        def update(self):
-            db.session.commit()
+    # get all items
+    def get_all_items(self, bucketlist_id):
+        return Items.query.filter_by(bucketlist=bucketlist_id)
 
-        def delete(self):
-            db.session.delete(self)
-            db.session.commit()
+    # if the item is updated the update method is called and save's the updated item in the data base
+    def update(self):
+        db.session.commit()
+
+    # delete an item from the db
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
 
+# a User model
 class User(db.Model):
+    # database
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    # User Name
     username = db.Column(db.String(80), nullable=False, unique=True)
+
+    # Identification Data: email & password
     email = db.Column(db.String(64), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
+
+    # Relationship between user and bucketlist
     bucketlists = db.relationship('Bucketlist', backref='users')
 
+    # New instance instantiation procedure
     def __init__(self, username, email, password):
         """initialize with name."""
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(password).decode()
 
+    # Checks if the passed password in the login post is the same with the user password in the database
     def verify_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
+    # Save a user to the data base
     def save(self):
         db.session.add(self)
         db.session.commit()
