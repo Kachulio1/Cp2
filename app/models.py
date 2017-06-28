@@ -60,6 +60,7 @@ class Item(db.Model):
     #
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
+    done = db.Column(db.Boolean,unique=False,default=False)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_modified = db.Column(
         db.DateTime, default=db.func.current_timestamp(),
