@@ -106,6 +106,27 @@ class TestBucketList(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn('Go to Mombasa', json.loads(r.data.decode()).values())
 
+    def test_get_bucketlist_by_id_that_does_not_exist(self):
+        """Test API returns a 404 status code if there is no bucketlist with that id."""
+        self.register_user()
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            '/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+
+        # get a bucket using id
+        result = self.client.get(
+            '/bucketlists/{}'.format(45),
+            headers=dict(Authorization="Bearer " + access_token), content_type='application/json')
+
+        self.assertEqual(result.status_code, 404)
+
+
     def test_bucketlist_deletion(self):
         """Test API can delete an existing bucketlist. DELETE request."""
         self.register_user()
