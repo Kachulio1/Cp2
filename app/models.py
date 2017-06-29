@@ -80,7 +80,8 @@ class Item(db.Model):
         db.session.commit()
 
     # get all items
-    def get_all_items(self, bucketlist_id):
+    @staticmethod
+    def get_all_items(bucketlist_id):
         return Item.query.filter_by(bucketlist=bucketlist_id).all()
 
     # if the item is updated the update method is called and save's the updated item in the data base
