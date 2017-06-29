@@ -207,3 +207,26 @@ class TestBucketList(TestCase):
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         self.assertEqual('A bucket with that name already exists', json.loads(r.data.decode())['msg'])
+
+    def test_can_create_item(self):
+        # register a user in order to create a bucket list
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            '/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+        item = {
+            'name': 'Swim at Diani'
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+        self.assertEqual(201, r.status_code)
