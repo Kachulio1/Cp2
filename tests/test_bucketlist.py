@@ -76,6 +76,14 @@ class TestBucketList(TestCase):
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
 
+        item = {'name': 'Talk to Joho'}
+        # create an item by making a POST request
+        r = self.client.post(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+
+
         # get all bucketlists
         result = self.client.get(
             '/bucketlists/',
@@ -97,6 +105,13 @@ class TestBucketList(TestCase):
             '/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
+
+        item = {'name': 'Talk to Joho'}
+        # create an item by making a POST request
+        self.client.post(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
 
         # get a bucket using id
         result = self.client.get(
@@ -230,3 +245,102 @@ class TestBucketList(TestCase):
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
         self.assertEqual(201, r.status_code)
+
+    def test_can_get_all_items(self):
+        # register a user in order to create a bucket list
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            '/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+        item = {
+            'name': 'Swim at Diani'
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+        item2 = {'name':'Talk to Joho'}
+
+        r = self.client.post(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item2), content_type='application/json')
+        # get all items
+        r = self.client.get(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+
+        self.assertIn('Talk to Joho', json.loads(r.data.decode())['items'][-1].values())
+
+    def test_cant_create_two_same_items_in_bucketlist(self):
+        # register a user in order to create a bucket list
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            '/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+        item = {
+            'name': 'Swim at Diani'
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+
+        item = {
+            'name': 'Swim at Diani'
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+        self.assertEqual(400, r.status_code)
+        self.assertEqual('An Item with that name already exists', json.loads(r.data.decode())['msg'])
+
+    def test_create_item_with_invalid_name(self):
+
+        # register a user in order to create a bucket list
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            '/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+        item = {
+            'name': {}
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            '/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+
+        self.assertEqual("Name must be a string", json.loads(r.data.decode())['msg'])
+
+    def test_can_delete_item(self):
+        pass
+
+    def test_can_update_item(self):
+        pass
