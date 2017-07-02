@@ -48,8 +48,7 @@ class Bucketlist(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def __repr__(self):
-        return "<Bucketlist {}>".format(self.name)
+
 
 
 class Item(db.Model):
@@ -94,8 +93,7 @@ class Item(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def __repr__(self):
-        return "<Item {}>".format(self.name)
+
 
 
 # a User model
@@ -130,5 +128,4 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
+
