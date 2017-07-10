@@ -23,10 +23,7 @@ class TestAuth(TestCase):
     def test_app_is_testing(self):
         """Test the app is using a different database for testing"""
         self.assertTrue(self.app.config['DEBUG'])
-        self.assertTrue(
-            self.app.config['SQLALCHEMY_DATABASE_URI'] == 'sqlite:////Users/rey/Desktop/cp2/test.sqlite'
 
-        )
 
     def test_register(self):
         """Test user registered successfully status code"""
