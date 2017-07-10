@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from app.models import User
 import json
-from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
+from flask_jwt_extended import  create_access_token
 
-auth = Blueprint('auth', __name__, url_prefix='/auth')
+auth = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
 
 
 @auth.route('/register', methods=['POST'])
@@ -71,4 +71,5 @@ def login():
 
     # create a token and return it with a response of 200
     ret = {'access_token': create_access_token(identity=user.username), 'msg': 'You have logged in successfully.'}
+
     return jsonify(ret), 200  # transmission is OK
