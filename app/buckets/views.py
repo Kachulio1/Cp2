@@ -1,8 +1,9 @@
 import json
 from flask import Blueprint, request, jsonify, abort
+
 from app.models import User, Bucketlist, Item
 from flask_jwt_extended import jwt_required,  get_jwt_identity
-bucketlist = Blueprint("bucketlists", __name__, url_prefix='/')
+bucketlist = Blueprint("bucketlists", __name__, url_prefix='/api/v1/')
 
 @bucketlist.route('bucketlists/', methods=['POST', 'GET'])
 @jwt_required
@@ -16,7 +17,7 @@ def bucketlists():
                    "msg": "Name must be a string"
                }), 400 # bad request
         # check if the user has a bucketlist with the same name
-        has_that_name = Bucketlist.query.filter_by(name=name).first()
+        has_that_name = Bucketlist.query.filter_by(name=name,user=user.id).first()
         if has_that_name:
 
             return jsonify({
@@ -42,7 +43,13 @@ def bucketlists():
         bucketlists = Bucketlist.get_all_buckets_for_user(user.id)
         results = []
 
-        for bucketlist in bucketlists:
+        limit = 20
+
+        if request.args.get('limit'):
+            if request.args.get('limit').isdigit():
+                limit = int(request.args.get('limit'))
+
+        for bucketlist in bucketlists[1:limit]:
             list_items =[]
             for item in bucketlist.items:
                 item_to_dict  = {
@@ -162,10 +169,60 @@ def bucketlist_items(id):
                 'name': item.name,
                 'date_created': item.date_created,
                 'date_modified': item.date_modified,
-                'created_by': item.user,
+                'done': item.done,
 
             }
             results.append(i)
 
-        return jsonify({'buckets': results}), 200
+        return jsonify({'items': results}), 200
 
+
+@bucketlist.route('bucketlists/<int:id>/items/<int:item_id>', methods=['GET', 'DELETE', 'PUT'])
+@jwt_required
+def get_delete_update_item(id, item_id):
+
+    bucketlist = Bucketlist.query.filter_by(id=id).first()
+
+    if not bucketlist:
+        return jsonify({'msg':'bucket not found'})
+
+    # get the item
+    item = Item.query.filter_by(id=item_id,bucketlist=id).first()
+
+    if not item:
+        return jsonify({'msg':'No item with that id'}), 404
+
+
+
+    if request.method == 'DELETE':
+        item.delete()
+        return jsonify({
+            "msg": "Item deleted successfully"
+        }), 200
+
+    if request.method == "PUT":
+        name = request.json.get('name', None)
+        done = request.json.get('done', None)
+        if name:
+            item.name = name
+        if done:
+            item.done = done
+
+        item.update()
+        return jsonify({'msg': 'Item Updated successfully'}), 201
+
+    if request.method == "GET":
+        response = jsonify({
+            'id': item.id,
+            'name': item.name,
+            'date_created': item.date_created,
+            'date_modified': item.date_modified,
+            'done': item.done
+        })
+
+        return response, 201
+
+
+@bucketlist.app_errorhandler(404)
+def shika_izo_errors(e):
+    return jsonify({"msg":"Not found"}), 404
