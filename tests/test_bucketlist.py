@@ -27,7 +27,7 @@ class TestBucketList(TestCase):
             'email': 'wahu@waru.com',
             'password': 'me'
         }
-        self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
 
     # helper method for login in a user
     def login_user(self):
@@ -35,7 +35,7 @@ class TestBucketList(TestCase):
             'username': 'Monica',
             'password': 'me'
         }
-        r = self.client.post('/auth/login', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/login', data=json.dumps(payload), content_type='application/json')
         return json.loads(r.data.decode())['access_token']
 
     def test_bucketlist_creation(self):
@@ -47,7 +47,7 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         self.assertEqual(r.status_code, 201)
@@ -64,7 +64,7 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         body = {
@@ -72,21 +72,21 @@ class TestBucketList(TestCase):
         }
         # create another bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
 
         item = {'name': 'Talk to Joho'}
         # create an item by making a POST request
         r = self.client.post(
-            '/bucketlists/1/items/',
+            'api/va/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
 
 
         # get all bucketlists
         result = self.client.get(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token), content_type='application/json')
 
         self.assertEqual(result.status_code, 200)
@@ -102,20 +102,20 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
 
         item = {'name': 'Talk to Joho'}
         # create an item by making a POST request
         self.client.post(
-            '/bucketlists/1/items/',
+            'api/v1/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
 
         # get a bucket using id
         result = self.client.get(
-            '/bucketlists/{}'.format(1),
+            'api/v1/bucketlists/{}'.format(1),
             headers=dict(Authorization="Bearer " + access_token), content_type='application/json')
         # assert that the bucketlist is actually returned given its ID
         self.assertEqual(result.status_code, 200)
@@ -130,13 +130,13 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
 
         # get a bucket using id
         result = self.client.get(
-            '/bucketlists/{}'.format(45),
+            'api/v1/bucketlists/{}'.format(45),
             headers=dict(Authorization="Bearer " + access_token), content_type='application/json')
 
         self.assertEqual(result.status_code, 404)
@@ -151,16 +151,16 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         # delete the bucket using its ID
         r = self.client.delete(
-            '/bucketlists/1',
+            'api/v1/bucketlists/1',
             headers=dict(Authorization="Bearer " + access_token), content_type='application/json')
         self.assertEqual(r.status_code, 200)
         result = self.client.get(
-            '/bucketlists/1',
+            'api/v1/bucketlists/1',
             headers=dict(Authorization="Bearer " + access_token))
         self.assertEqual(result.status_code, 404)
 
@@ -173,12 +173,12 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         # edit the post using PUT request
         result = self.client.put(
-            '/bucketlists/1', data=json.dumps({'name': 'Go to Bujumbura'}),
+            'api/v1/bucketlists/1', data=json.dumps({'name': 'Go to Bujumbura'}),
             headers=dict(Authorization="Bearer " + access_token), content_type='application/json')
         # assert that the bucketlist is actually returned given its ID
         self.assertEqual(result.status_code, 200)
@@ -193,7 +193,7 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         self.assertEqual(r.status_code, 400)
@@ -210,7 +210,7 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         body = {
@@ -218,7 +218,7 @@ class TestBucketList(TestCase):
         }
         # create another bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         self.assertEqual('A bucket with that name already exists', json.loads(r.data.decode())['msg'])
@@ -233,7 +233,7 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         item = {
@@ -241,7 +241,7 @@ class TestBucketList(TestCase):
         }
         # create an item by making a POST request
         r = self.client.post(
-            '/bucketlists/1/items/',
+            'api/v1/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
         self.assertEqual(201, r.status_code)
@@ -256,7 +256,7 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         item = {
@@ -264,18 +264,18 @@ class TestBucketList(TestCase):
         }
         # create an item by making a POST request
         r = self.client.post(
-            '/bucketlists/1/items/',
+            'api/v1/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
         item2 = {'name':'Talk to Joho'}
 
         r = self.client.post(
-            '/bucketlists/1/items/',
+            'api/v1/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item2), content_type='application/json')
         # get all items
         r = self.client.get(
-            '/bucketlists/1/items/',
+            'api/v1/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
 
@@ -291,7 +291,7 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         item = {
@@ -299,7 +299,7 @@ class TestBucketList(TestCase):
         }
         # create an item by making a POST request
         r = self.client.post(
-            '/bucketlists/1/items/',
+            'api/v1/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
 
@@ -308,7 +308,7 @@ class TestBucketList(TestCase):
         }
         # create an item by making a POST request
         r = self.client.post(
-            '/bucketlists/1/items/',
+            'api/v1/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
         self.assertEqual(400, r.status_code)
@@ -325,7 +325,7 @@ class TestBucketList(TestCase):
         }
         # create a bucketlist by making a POST request
         r = self.client.post(
-            '/bucketlists/',
+            'api/v1/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(body), content_type='application/json')
         item = {
@@ -333,14 +333,138 @@ class TestBucketList(TestCase):
         }
         # create an item by making a POST request
         r = self.client.post(
-            '/bucketlists/1/items/',
+            'api/v1/bucketlists/1/items/',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(item), content_type='application/json')
 
         self.assertEqual("Name must be a string", json.loads(r.data.decode())['msg'])
 
-    def test_can_delete_item(self):
-        pass
+    def test_can_get_item(self):
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            'api/v1/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+        item = {
+            'name': 'Talk to joho'
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            'api/v1/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+        self.assertEqual(r.status_code, 201)
 
-    def test_can_update_item(self):
-        pass
+        result = self.client.get(
+            'api/v1/bucketlists/1/items/1',
+            headers=dict(Authorization="Bearer " + access_token))
+        self.assertIn('Talk to joho', json.loads(result.data.decode()).values())
+
+    def test_can_delete_item(self):
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            'api/v1/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+        item = {
+            'name': 'Talk to joho'
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            'api/v1/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+        self.assertEqual(r.status_code, 201)
+
+        r = self.client.delete(
+            'api/v1/bucketlists/1/items/1',
+            headers=dict(Authorization="Bearer " + access_token), content_type='application/json')
+
+        result = self.client.get(
+            'api/v1/bucketlists/1/items/1',
+            headers=dict(Authorization="Bearer " + access_token))
+        self.assertEqual('Item deleted successfully', json.loads(r.data.decode())['msg'])
+        self.assertEqual(result.status_code, 404)
+
+
+
+    def test_404(self):
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        r = self.client.get('api/v1/bucketlists/not/a/real/url',
+            headers=dict(Authorization="Bearer " + access_token))
+
+        self.assertEqual('Not found', json.loads(r.data.decode())['msg'])
+
+    def test_wrong_bucket_id(self):
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            'api/v1/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+        item = {
+            'name': 'Talk to joho'
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            'api/v1/bucketlists/1/items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+        self.assertEqual(r.status_code, 201)
+
+        r = self.client.get(
+            'api/v1/bucketlists/2/items/1',
+            headers=dict(Authorization="Bearer " + access_token), content_type='application/json')
+
+
+        self.assertEqual('bucket not found', json.loads(r.data.decode())['msg'])
+
+    def test_update_item(self):
+        self.register_user()
+        # get a token when a user log'sin
+        access_token = self.login_user()
+        body = {
+            'name': 'Go to Mombasa'
+        }
+        # create a bucketlist by making a POST request
+        r = self.client.post(
+            'api/v1/bucketlists/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(body), content_type='application/json')
+        item = {
+            'name': 'Talk to joho'
+        }
+        # create an item by making a POST request
+        r = self.client.post(
+            'api/v1/bucketlists/1/''items/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(item), content_type='application/json')
+        self.assertEqual(r.status_code, 201)
+        updete_item = {
+            'name': 'Talk to Port',
+            'done': 'True'
+        }
+        r = self.client.put(
+            'api/v1/bucketlists/1/items/1',
+            headers=dict(Authorization="Bearer " + access_token), data= json.dumps(updete_item), content_type='application/json')
+
+        self.assertEqual('Item Updated successfully', json.loads(r.data.decode())['msg'])

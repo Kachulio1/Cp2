@@ -36,7 +36,7 @@ class TestAuth(TestCase):
             'password': '12jkl23@'
         }
 
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(201, r.status_code)
 
     def test_user_created_message(self):
@@ -46,7 +46,7 @@ class TestAuth(TestCase):
             'email': 'addis@ymail.com',
             'password': 'A155RTD@'
         }
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertEqual('User Created', json.loads(r.data.decode())['msg'])
 
     def test_reject_invalid_characters_in_user_name(self):
@@ -57,7 +57,7 @@ class TestAuth(TestCase):
             'password': '12jkl23@'
         }
 
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(400, r.status_code)
         self.assertEqual('Invalid User Name Only Use Alphabet and Numbers', json.loads(r.data.decode())['msg'])
 
@@ -69,7 +69,7 @@ class TestAuth(TestCase):
             'password': '12jkl23@'
         }
 
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(400, r.status_code)
         self.assertEqual('Sorry that username is too long (should be no longer than 80 characters)',
                          json.loads(r.data.decode())['msg'])
@@ -83,7 +83,7 @@ class TestAuth(TestCase):
             'password': '12jkl23@'
         }
 
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(400, r.status_code)
         self.assertEqual('Username is required', json.loads(r.data.decode())['msg'])
 
@@ -95,7 +95,7 @@ class TestAuth(TestCase):
             'password': ''
         }
 
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(400, r.status_code)
         self.assertEqual('Please provide a password', json.loads(r.data.decode())['msg'])
 
@@ -107,7 +107,7 @@ class TestAuth(TestCase):
             'password': 'peace'
         }
 
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(400, r.status_code)
         self.assertEqual('Please provide an email', json.loads(r.data.decode())['msg'])
 
@@ -118,13 +118,13 @@ class TestAuth(TestCase):
             'email': 'yahoo@ymail.com',
             'password': '12jkl23@'
         }
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         payload = {
             'username': 'Kachulio',
             'email': 'yahoo@ymail.com',
             'password': '12jkl23@'
         }
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertIn('Username has already been taken', json.loads(r.data.decode())['msg'])
 
     def test_register_with_existing_email(self):
@@ -134,7 +134,7 @@ class TestAuth(TestCase):
             'email': 'yahoo@ymail.com',
             'password': '12jkl23@'
         }
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
 
         payload = {
             'username': 'David',
@@ -142,7 +142,7 @@ class TestAuth(TestCase):
             'password': '12jkl23@'
         }
         # make a post with an email that has already been registered with another user
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertIn('The email address you have entered is already registered', json.loads(r.data.decode())['msg'])
 
     def test_user_login(self):
@@ -153,10 +153,10 @@ class TestAuth(TestCase):
             'password': '12jkl23@'
         }
 
-        r = self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(r.status_code, 201)
         # get a login response
-        r = self.client.post('/auth/login', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/login', data=json.dumps(payload), content_type='application/json')
 
         # get the results in json format
         result = json.loads(r.data.decode())
@@ -174,7 +174,7 @@ class TestAuth(TestCase):
             'password': 'yes'
         }
         # send a POST request to /auth/login with the data above
-        r = self.client.post('/auth/login', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/login', data=json.dumps(payload), content_type='application/json')
         # get the result in json
         result = json.loads(r.data.decode())
 
@@ -190,7 +190,7 @@ class TestAuth(TestCase):
             'password': '12jkl23@'
         }
 
-        r = self.client.post('/auth/login', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/login', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(400, r.status_code)
         self.assertEqual('Username is required', json.loads(r.data.decode())['msg'])
 
@@ -201,7 +201,7 @@ class TestAuth(TestCase):
             'password': ''
         }
 
-        r = self.client.post('/auth/login', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/login', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(400, r.status_code)
         self.assertEqual('Password is required', json.loads(r.data.decode())['msg'])
 
@@ -212,10 +212,10 @@ class TestAuth(TestCase):
             'email': 'Kachulio@ymail.com',
             'password': '12jkl23@'
         }
-        self.client.post('/auth/register', data=json.dumps(payload), content_type='application/json')
+        self.client.post('api/v1/auth/register', data=json.dumps(payload), content_type='application/json')
         # change the password
         payload['password'] = 'not the correct password'
 
-        r = self.client.post('/auth/login', data=json.dumps(payload), content_type='application/json')
+        r = self.client.post('api/v1/auth/login', data=json.dumps(payload), content_type='application/json')
         self.assertEqual(401, r.status_code)
         self.assertEqual('Bad  password', json.loads(r.data.decode())['msg'])

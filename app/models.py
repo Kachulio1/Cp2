@@ -85,7 +85,7 @@ class Item(db.Model):
 
     # if the item is updated the update method is called and save's the updated item in the data base
     def update(self):
-        db.session.commit()
+        self.save()
 
 
     # delete an item from the db
