@@ -1,5 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/Kachulio1/Cp2/badge.svg?branch=dev)](https://coveralls.io/github/Kachulio1/Cp2?branch=dev)
-[![Build Status](https://travis-ci.org/Kachulio1/Cp2.svg?branch=master)](https://travis-ci.org/Kachulio1/Cp2)
+[![Build Status](https://travis-ci.org/Kachulio1/Cp2.svg?branch=dev)](https://travis-ci.org/Kachulio1/Cp2)
 # Project Title
 
 One Paragraph of project description goes here
