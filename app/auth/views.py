@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, url_for
 from app.models import User
-import json
+import re
 from flask_jwt_extended import  create_access_token
 
 auth = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
@@ -40,12 +40,13 @@ def register():
         return jsonify({'msg': "Password must be greater than 6 char"}), 400
     email = request.json.get('email', None)
     # check if the email is empty
-    if "@" and '.' not in email:
+
+
+    # client error in the request 400
+    if not re.match("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",email):
         return jsonify({
             "msg": "Please provide a valid email"
         }), 400
-    if not email:
-        return jsonify({'msg': 'Please provide an email'}), 400  # client error in the request 400
 
     if User.query.filter_by(email=email).first():
         return jsonify({'msg': 'The email address you have entered is already registered'}), 409  # 409 - Conflict
