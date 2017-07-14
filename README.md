@@ -107,6 +107,16 @@ Get A Bucket
 Delete A Bucket
 ![Screen shot](screenshot/delete_bucket.png)
 
+Create An Item
+![Screen shot](screenshot/create_item.png)
+
+Get All Items
+![Screen shot](screenshot/get_all_items.png)
+
+
+Delete An Item 
+![Screen shot](screenshot/delete_item.png)
+
 ## Built With
 
 * [Flask](http://flask.pocoo.org/) - The web framework used
