@@ -246,7 +246,7 @@ class TestBucketList(TestCase):
             headers=dict(Authorization="Bearer " + self.access_token),
             data=json.dumps(self.item), content_type='application/json')
 
-        self.assertEqual(400, r.status_code)
+        self.assertEqual(409, r.status_code)
         self.assertEqual('An Item with that name already exists', json.loads(r.data.decode())['msg'])
 
     def test_create_item_with_invalid_name(self):
