@@ -14,7 +14,7 @@ class DevelopmentConfig(Config):
     """Configurations for Development."""
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/bucket'
+
 class TestingConfig(Config):
     """Configurations for Testing, with a separate test database."""
     TESTING = True
