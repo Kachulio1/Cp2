@@ -24,7 +24,7 @@ def bucketlists():
             return jsonify({
                 "msg": "A bucket with that name already exists",
 
-            }), 400  # bad request
+            }), 409  # conflict
 
         if name.strip():
             bucketlist = Bucketlist(name=name, user_id=user.id)
@@ -115,7 +115,7 @@ def get_update_delete(id):
         }), 200
 
     elif request.method == 'PUT':
-        name = request.json.get('name', None)#
+        name = request.json.get('name')
         if name == bucketlist.name:
             return jsonify({
                 'msg':"The Bucket cannot be updated with the same data"
@@ -171,7 +171,7 @@ def bucketlist_items(id):
     if not bucketlist:
         return jsonify({}), 400
     if request.method == 'POST':
-        name = request.json.get('name', None) #
+        name = request.json.get('name')
         if name is None:
             return jsonify({
                 "msg": "Provide key name"
@@ -185,7 +185,7 @@ def bucketlist_items(id):
         if has_that_name:
             return jsonify({
                 "msg": "An Item with that name already exists"
-            }), 400  # bad request
+            }), 409  # conflict
 
         if name.strip():
             item = Item(name=name, bucket_id=id)
