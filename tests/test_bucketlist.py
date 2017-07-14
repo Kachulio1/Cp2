@@ -53,6 +53,16 @@ class TestBucketList(TestCase):
         db.session.remove()
         db.drop_all()
 
+    def test_invalid_token(self):
+        self.access_token += 'Bad Token'
+        r = self.client.post(
+            url_for('bucketlists.bucketlists'),
+            headers=dict(Authorization="Bearer " + self.access_token),
+            data=json.dumps(self.body), content_type='application/json')
+
+        self.assertIn('Bad Authorization header', json.loads(r.data.decode())['msg'])
+
+
     def test_bucketlist_creation(self):
         """Test API can create a bucketlist POST request"""
         # create a bucketlist by making a POST request
