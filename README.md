@@ -9,6 +9,8 @@
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
+### API documentation
+The API has been documented using apiblueprint and the online version can be found [here](https://ndoo-.herokuapp.com/)
 
 ## SCOPE
 
@@ -60,6 +62,7 @@ Install postgres ```brew install postgresql```
 
 End with an example of getting some data out of the system or using it for a little demo
 
+
 ## Running the tests
 
 Explain how to run the automated tests for this system
@@ -83,6 +86,26 @@ Give an example
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
+
+### ScreenShots
+
+User Register
+![Screen shot](screenshot%20images/user_register.png)
+
+User Login
+![Screen shot](screenshot%20images/user_login.png)
+
+Bucket Create
+![Screen shot](screenshot%20images/create_bucket.png)
+
+Update Bucket 
+![Screen shot](screenshot%20images/update_bucket.png)
+
+Get A Bucket
+![Screen shot](screenshot%20images/get_bucket.png)
+
+Delete A Bucket
+![Screen shot](screenshot%20images/delete_bucket.png)
 
 ## Built With
 
