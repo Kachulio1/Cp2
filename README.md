@@ -90,22 +90,22 @@ Add additional notes about how to deploy this on a live system
 ### ScreenShots
 
 User Register
-![Screen shot](screenshot%20images/user_register.png)
+![Screen shot](screenshot/user_register.png)
 
 User Login
-![Screen shot](screenshot%20images/user_login.png)
+![Screen shot](screenshot/user_login.png)
 
 Bucket Create
-![Screen shot](screenshot%20images/create_bucket.png)
+![Screen shot](screenshot/create_bucket.png)
 
 Update Bucket 
-![Screen shot](screenshot%20images/update_bucket.png)
+![Screen shot](screenshot/update_bucket.png)
 
 Get A Bucket
-![Screen shot](screenshot%20images/get_bucket.png)
+![Screen shot](screenshot/get_bucket.png)
 
 Delete A Bucket
-![Screen shot](screenshot%20images/delete_bucket.png)
+![Screen shot](screenshot/delete_bucket.png)
 
 ## Built With
 
