@@ -330,7 +330,7 @@ class TestBucketList(TestCase):
         self.assertEqual(r.status_code, 201)
 
         r = self.client.get(
-            url_for('bucketlists.get_delete_update_item',id=self.id , item_id=self.id),
+            url_for('bucketlists.get_delete_update_item',id=99  , item_id=self.id),
             headers=dict(Authorization="Bearer " + self.access_token), content_type='application/json')
         self.assertEqual(r.status_code, 404)
         self.assertEqual('bucket not found', json.loads(r.data.decode())['msg'])
