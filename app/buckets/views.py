@@ -236,7 +236,7 @@ def get_delete_update_item(id, item_id):
     bucketlist = Bucketlist.query.filter_by(id=id, user=user.id).first()
 
     if not bucketlist:
-        return jsonify({'msg': 'bucket not found'}) #
+        return jsonify({'msg': 'bucket not found'}) ,404
 
     # get the item
     item = Item.query.filter_by(id=item_id, bucketlist=id).first()
